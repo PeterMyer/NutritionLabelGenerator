@@ -1,34 +1,28 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import apiService from "./apiService";
 import { Link } from "react-router-dom";
 import RenderImage from "./RenderImage"
 
 
-class UserImages extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-     images: null
-    }
+export default function UserImages() {
+  const [imgPaths, setImgPaths] = useState([])
+
+  useEffect(()=> {
+    fetchData()
+  },[])
+
+  const fetchData = async () =>{
+      let filePaths = await apiService.import.retrieveFilePaths()
+      setImgPaths(filePaths)
   }
 
-  componentDidMount = async() => {
-    let imgs = await apiService.import.retrieveFilePaths()
-    this.setState({images:imgs})
-    }
-
-
-
-
-  render() {
-    const retrievedImages = this.state.images
     return(
       <div>
     <div>
      <div>Your Images</div>
         <div>
-         {retrievedImages !== null ?
-         retrievedImages.map((image)=>{
+         {imgPaths !== null ?
+         imgPaths.map((image)=>{
           return(
             <div>
               <RenderImage filePath={image.filepath} />
@@ -41,12 +35,9 @@ class UserImages extends React.Component {
           No Images
         </div>}
       </div>
-
      <Link to="/">Home</Link>|{" "}
      <Link to="/upload">Upload New Files </Link> |{" "}
     </div>
     </div>
-  )}}
-
-
-export default UserImages
+  )
+}

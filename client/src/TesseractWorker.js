@@ -1,5 +1,5 @@
 import { createWorker } from "tesseract.js";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { useLocation } from 'react-router-dom';
 
 
@@ -10,7 +10,11 @@ const [imgText, setImgText] = useState("")
 const [imgLines, setImgLines] = useState("")
 
 
-console.log('state', imgData)
+useEffect(()=> {
+
+
+
+  console.log('state', imgData)
   const worker = createWorker();
   (async () => {
     await worker.load();
@@ -26,10 +30,13 @@ console.log('state', imgData)
     console.log(text);
     setImgText(text)
     setImgLines(lines)
-
-    console.log(this.state)
     await worker.terminate();
-  })();
+
+    })();
+  },[])
+
+
+
   return(
     <div>Reading IMG</div>
   )
